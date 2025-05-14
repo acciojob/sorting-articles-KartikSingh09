@@ -1,119 +1,77 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Alphabetical Article Sorter</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 0;
-      padding: 0;
-      background-image: url('https://images.unsplash.com/photo-1505028106030-e07ea1bd80c3?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=MnwxMTc3M3wwfDF8c2VhcmNofDR8fHNvZnR3YXJlJTIwZGV2ZWxvcG1lbnQlMjBjYXJlZXIlMjBwYXRofGVufDB8fHx8MTY3MjMwNDEyNg&ixlib=rb-4.0.3&q=80&w=2000');
-      background-size: cover;
-      background-position: center;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Alphabetical Article Sorter</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+            background: url('https://images.unsplash.com/photo-1506744038136-46273834b3fb') no-repeat center center fixed;
+            background-size: cover;
+        }
 
-    .container {
-      background-color: rgba(255, 255, 255, 0.9);
-      max-width: 400px;
-      margin: 50px auto;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-    }
+        .container {
+            background-color: rgba(255, 255, 255, 0.95);
+            max-width: 500px;
+            margin: 50px auto;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+        }
 
-    h1 {
-      text-align: center;
-      margin-bottom: 20px;
-    }
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-    input[type="text"] {
-      width: 100%;
-      padding: 10px;
-      margin: 10px 0;
-      border-radius: 4px;
-      border: 1px solid #ccc;
-    }
+        ul {
+            list-style-type: square;
+            padding-left: 20px;
+        }
 
-    button {
-      padding: 10px;
-      background-color: #4CAF50;
-      color: white;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      width: 100%;
-      margin: 10px 0;
-    }
+        li {
+            padding: 10px 0;
+            border-bottom: 1px solid #ddd;
+        }
 
-    button:hover {
-      background-color: #45a049;
-    }
-
-    ul {
-      list-style-type: square;
-      padding-left: 20px;
-    }
-
-    li {
-      margin-bottom: 10px;
-    }
-  </style>
+        li:last-child {
+            border-bottom: none;
+        }
+    </style>
 </head>
 <body>
-  <div class="container">
-    <h1>Alphabetical Article Sorter</h1>
-    <input type="text" id="bandNameInput" placeholder="Enter band name" />
-    <button id="addBandButton">Add Band</button>
-    <button id="sortButton">Sort Alphabetically</button>
-    <ul id="bandList"></ul>
-  </div>
+    <div class="container">
+        <h1>Band List</h1>
+        <ul id="bands">
+            <!-- Bands will be populated here -->
+        </ul>
+    </div>
 
-  <script>
-    const bands = [
-      'The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil',
-      'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State',
-      'We Came as Romans', 'Counterparts', 'Oh, Sleeper',
-      'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'
-    ];
+    <script>
+        const bands = [
+            'The Plot in You', 'The Devil Wears Prada', 'Pierce the Veil',
+            'Norma Jean', 'The Bled', 'Say Anything', 'The Midway State',
+            'We Came as Romans', 'Counterparts', 'Oh, Sleeper',
+            'A Skylit Drive', 'Anywhere But Here', 'An Old Dog'
+        ];
 
-    function stripArticle(bandName) {
-      return bandName.replace(/^(a |an |the )/i, '').trim();
-    }
+        function cleanBandName(name) {
+            return name.replace(/^(a |an |the )/i, '').trim();
+        }
 
-    function renderBands(bandsToRender) {
-      const ul = document.getElementById('bandList');
-      ul.innerHTML = ''; // Clear the existing list
-      bandsToRender.forEach(band => {
-        const li = document.createElement('li');
-        li.textContent = band;
-        ul.appendChild(li);
-      });
-    }
+        const sortedBands = bands.sort((a, b) => {
+            return cleanBandName(a).localeCompare(cleanBandName(b));
+        });
 
-    function sortBands() {
-      const sortedBands = bands.slice().sort((a, b) => {
-        const nameA = stripArticle(a).toLowerCase();
-        const nameB = stripArticle(b).toLowerCase();
-        return nameA.localeCompare(nameB);
-      });
-      renderBands(sortedBands);
-    }
-
-    document.getElementById('addBandButton').addEventListener('click', () => {
-      const bandNameInput = document.getElementById('bandNameInput');
-      const bandName = bandNameInput.value.trim();
-      if (bandName) {
-        bands.push(bandName);
-        bandNameInput.value = ''; // Clear input field
-        renderBands(bands);
-      }
-    });
-
-    document.getElementById('sortButton').addEventListener('click', sortBands);
-
-    // Initial render of the sorted bands
-    renderBands(bands);
-  </script>
+        const bandList = document.getElementById('bands');
+        sortedBands.forEach(band => {
+            const li = document.createElement('li');
+            li.textContent = band;
+            bandList.appendChild(li);
+        });
+    </script>
 </body>
 </html>
