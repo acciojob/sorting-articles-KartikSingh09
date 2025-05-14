@@ -27,6 +27,29 @@
       margin-bottom: 20px;
     }
 
+    input[type="text"] {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      padding: 10px;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      width: 100%;
+      margin: 10px 0;
+    }
+
+    button:hover {
+      background-color: #45a049;
+    }
+
     ul {
       list-style-type: square;
       padding-left: 20px;
@@ -40,7 +63,10 @@
 <body>
   <div class="container">
     <h1>Alphabetical Article Sorter</h1>
-    <ul id="band"></ul>
+    <input type="text" id="bandNameInput" placeholder="Enter band name" />
+    <button id="addBandButton">Add Band</button>
+    <button id="sortButton">Sort Alphabetically</button>
+    <ul id="bandList"></ul>
   </div>
 
   <script>
@@ -55,18 +81,39 @@
       return bandName.replace(/^(a |an |the )/i, '').trim();
     }
 
-    const sortedBands = bands.slice().sort((a, b) => {
-      const nameA = stripArticle(a).toLowerCase();
-      const nameB = stripArticle(b).toLowerCase();
-      return nameA.localeCompare(nameB);
+    function renderBands(bandsToRender) {
+      const ul = document.getElementById('bandList');
+      ul.innerHTML = ''; // Clear the existing list
+      bandsToRender.forEach(band => {
+        const li = document.createElement('li');
+        li.textContent = band;
+        ul.appendChild(li);
+      });
+    }
+
+    function sortBands() {
+      const sortedBands = bands.slice().sort((a, b) => {
+        const nameA = stripArticle(a).toLowerCase();
+        const nameB = stripArticle(b).toLowerCase();
+        return nameA.localeCompare(nameB);
+      });
+      renderBands(sortedBands);
+    }
+
+    document.getElementById('addBandButton').addEventListener('click', () => {
+      const bandNameInput = document.getElementById('bandNameInput');
+      const bandName = bandNameInput.value.trim();
+      if (bandName) {
+        bands.push(bandName);
+        bandNameInput.value = ''; // Clear input field
+        renderBands(bands);
+      }
     });
 
-    const ul = document.getElementById('band');
-    sortedBands.forEach(band => {
-      const li = document.createElement('li');
-      li.textContent = band;
-      ul.appendChild(li);
-    });
+    document.getElementById('sortButton').addEventListener('click', sortBands);
+
+    // Initial render of the sorted bands
+    renderBands(bands);
   </script>
 </body>
 </html>
